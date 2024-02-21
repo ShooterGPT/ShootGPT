@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShotGPT</title>
+  <style>
+    .button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    footer {
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Welcome to ShotGPT!</h1>
+<p>Click the "Shoot" button to take your chance!</p>
+
+<button id="shootButton" class="button" onclick="shoot()">Shoot</button>
+<button id="passButton" class="button" onclick="pass()">Pass</button>
+
+<p id="result"></p>
+
+<div>
+  <h2>Items:</h2>
+  <button class="button" onclick="useItem('magnifyingGlass')">Magnifying Glass</button>
+  <button class="button" onclick="useItem('knife')">Knife</button>
+  <button class="button" onclick="useItem('beer')">Beer</button>
+</div>
+
+<script>
+  var currentPlayer = 1;
+  var hintPresses = 3;
+
+  function shoot() {
+    var randomNumber = Math.random(); // Generate random number between 0 and 1
+    if (randomNumber < 0.5) {
+      document.getElementById("shootButton").disabled = true;
+      document.getElementById("passButton").disabled = true;
+      document.getElementById("result").textContent = "Game Over! Player " + currentPlayer + " loses!";
+    } else {
+      // Switch to the next player's turn
+      currentPlayer = currentPlayer === 1 ? 2 : 1;
+      document.getElementById("result").textContent = "Player " + currentPlayer + "'s turn";
+    }
+  }
+
+  function pass() {
+    // Switch to the next player's turn without taking a shot
+    currentPlayer = currentPlayer === 1 ? 2 : 1;
+    document.getElementById("result").textContent = "Player " + currentPlayer + "'s turn";
+  }
+
+  function useItem(item) {
+    switch (item) {
+      case 'magnifyingGlass':
+        if (hintPresses > 0) {
+          var hintMessage;
+          var randomNumber = Math.random(); // Generate random number between 0 and 1
+          if (randomNumber < 0.5) {
+            hintMessage = "Hint: Player " + currentPlayer + " will die on the next shot.";
+          } else {
+            hintMessage = "Hint: Player " + currentPlayer + " will survive the next shot.";
+          }
+          alert(hintMessage);
+          hintPresses--;
+          document.getElementById("magnifyingGlass").textContent = "Magnifying Glass (" + hintPresses + " uses remaining)";
+        } else {
+          alert("No more hints remaining.");
+        }
+        break;
+      case 'knife':
+        alert("You found a knife! You can use it to carve your name on the barrel.");
+        break;
+      case 'beer':
+        alert("You found a beer! Take a drink to calm your nerves.");
+        break;
+      default:
+        alert("Invalid item!");
+        break;
+    }
+  }
+</script>
+
+<footer>
+  <p>Created by ChatGPT</p>
+</footer>
+
+</body>
+</html>
